@@ -1,0 +1,2919 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeRoast & More</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Все стили остаются без изменений */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f5f0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8B4513;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #8B4513;
+        }
+
+        .nav-active {
+            color: #8B4513 !important;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            width: 200px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #8B4513;
+            width: 250px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .cart-icon, .user-icon {
+            font-size: 24px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .cart-icon:hover, .user-icon:hover {
+            color: #8B4513;
+        }
+
+        .cart-badge {
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            top: -10px;
+            right: 15px;
+        }
+
+        /* User Modal */
+        .user-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .user-modal.active {
+            right: 0;
+        }
+
+        .user-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-header h3 {
+            margin: 0;
+            color: #8B4513;
+        }
+
+        .close-user {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .user-content {
+            padding: 20px;
+        }
+
+        .user-section {
+            margin-bottom: 30px;
+        }
+
+        .user-section h4 {
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+
+        .profile-info {
+            background: #f9f5f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info p {
+            margin-bottom: 8px;
+        }
+
+        .orders-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .order-item {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: #8B4513;
+        }
+
+        .order-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-processing {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-pending {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .order-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-form, .register-form {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #8B4513;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #6b3a0f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #8B4513;
+            color: #8B4513;
+        }
+
+        .btn-outline:hover {
+            background: #8B4513;
+            color: white;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: #8B4513;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        /* Search Results Modal */
+        .search-results-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-results-modal.active {
+            display: flex;
+        }
+
+        .search-results-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .search-results-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-results-header h3 {
+            margin: 0;
+            color: #8B4513;
+        }
+
+        .close-search-results {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .search-results-list {
+            padding: 20px;
+        }
+
+        .search-result-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #f9f5f0;
+        }
+
+        .search-result-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .search-result-info {
+            flex: 1;
+        }
+
+        .search-result-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .search-result-price {
+            color: #8B4513;
+            font-weight: 700;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            margin: 0;
+            color: #8B4513;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .cart-items {
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #8B4513;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quantity {
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .cart-total {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-total span:last-child {
+            color: #8B4513;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 20px;
+            padding: 15px;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .checkout-btn:hover {
+            background: #6b3a0f;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-cart i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 40px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #8B4513;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .back-to-home:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 500px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #8B4513;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #8B4513;
+            margin: 15px auto;
+        }
+
+        /* Products */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #8B4513;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1rem;
+        }
+
+        /* About */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .about-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .about-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .rating {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: #8B4513;
+        }
+
+        /* Footer */
+        footer {
+            background: #8B4513;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: #fff;
+            margin-top: 10px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #f0e6d2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #f0e6d2;
+        }
+
+        /* Catalog Page */
+        .catalog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 10px;
+            color: #8B4513;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-option {
+            padding: 8px 15px;
+            background: #f0e6d2;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-option:hover, .filter-option.active {
+            background: #8B4513;
+            color: white;
+        }
+
+        .reset-filters {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+
+        .reset-filters:hover {
+            background: #c0392b;
+        }
+
+        /* Checkout Page */
+        .checkout-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background: #8B4513;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #27ae60;
+            color: white;
+        }
+
+        .step-line {
+            width: 50px;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .step:last-child .step-line {
+            display: none;
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-col {
+            margin-bottom: 20px;
+        }
+
+        .form-col-full {
+            grid-column: 1 / -1;
+        }
+
+        .delivery-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .delivery-option {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .delivery-option:hover {
+            border-color: #8B4513;
+        }
+
+        .delivery-option.selected {
+            border-color: #8B4513;
+            background: #f9f5f0;
+        }
+
+        .delivery-option h4 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item-summary {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 15px 0;
+            border-top: 2px solid #eee;
+            margin-top: 10px;
+        }
+
+        .order-total span:last-child {
+            color: #8B4513;
+        }
+
+        /* Profile Page */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #8B4513;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .profile-info-main h2 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .profile-tab.active {
+            border-bottom: 3px solid #8B4513;
+            color: #8B4513;
+            font-weight: 700;
+        }
+
+        /* Success Page */
+        .success-page {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: #27ae60;
+            margin-bottom: 30px;
+        }
+
+        .success-page h1 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .order-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8B4513;
+            margin: 20px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 400px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box input {
+                width: 150px;
+            }
+
+            .search-box input:focus {
+                width: 180px;
+            }
+
+            .cart-modal, .user-modal {
+                width: 100%;
+                right: -100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .btn {
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">К</div>
+                <div class="logo-text">CoffeeRoast & More</div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Главная</a></li>
+                    <li><a href="#" class="nav-link" data-page="catalog">Каталог</a></li>
+                    <li><a href="#" class="nav-link" data-page="about">О компании</a></li>
+                    <li><a href="#" class="nav-link" data-page="contacts">Контакты</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Поиск товаров...">
+                </div>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <div class="user-icon" id="userIcon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- User Modal -->
+    <div class="user-modal" id="userModal">
+        <div class="user-header">
+            <h3 id="userModalTitle">Вход в аккаунт</h3>
+            <button class="close-user" id="closeUser">&times;</button>
+        </div>
+        <div class="user-content">
+            <!-- Login Form -->
+            <div class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>Телефон или Email</label>
+                    <input type="text" id="loginInput" placeholder="Введите телефон или email">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="Введите пароль">
+                </div>
+                <button class="btn btn-block" id="loginBtn">Войти</button>
+                <button class="btn-link" id="showRegister">Создать аккаунт</button>
+            </div>
+
+            <!-- Register Form -->
+            <div class="register-form" id="registerForm">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="registerName" placeholder="Введите ваше имя">
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="registerPhone" placeholder="Введите телефон">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="Введите email">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="registerPassword" placeholder="Введите пароль">
+                </div>
+                <button class="btn btn-block" id="registerBtn">Зарегистрироваться</button>
+                <button class="btn-link" id="showLogin">Уже есть аккаунт?</button>
+            </div>
+
+            <!-- Profile Section (shown when logged in) -->
+            <div class="user-section" id="profileSection" style="display: none;">
+                <h4>Информация о клиенте</h4>
+                <div class="profile-info" id="profileInfo">
+                    <!-- Profile info will be populated here -->
+                </div>
+                <button class="btn btn-secondary btn-block" id="logoutBtn">Выйти</button>
+            </div>
+            
+            <div class="user-section" id="ordersSection" style="display: none;">
+                <h4>Мои заказы</h4>
+                <div class="orders-list" id="userOrdersList">
+                    <!-- Orders will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results Modal -->
+    <div class="search-results-modal" id="searchResultsModal">
+        <div class="search-results-content">
+            <div class="search-results-header">
+                <h3>Результаты поиска</h3>
+                <button class="close-search-results" id="closeSearchResults">&times;</button>
+            </div>
+            <div class="search-results-list" id="searchResultsList">
+                <!-- Search results will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Корзина покупок</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total" id="cartTotal">
+            <span>Итого:</span>
+            <span id="totalPrice">0₽</span>
+        </div>
+        <a href="#" class="checkout-btn" id="checkoutBtn">Оформить заказ</a>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Home Page -->
+    <div class="page active" id="home-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Свежеобжаренный кофе</h1>
+                <p>Прямо из обжарочной к вам домой</p>
+                <a href="#" class="btn nav-link" data-page="catalog">Смотреть каталог</a>
+            </div>
+        </section>
+
+        <!-- Popular Products -->
+        <section>
+            <div class="container">
+                <h2 class="section-title">Популярные сорта кофе</h2>
+                <div class="products-grid">
+                    <div class="product-card" data-product="1">
+                        <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="product-info">
+                            <h3 class="product-title">Эфиопский кофе Арбика</h3>
+                            <p class="product-description">Свежеобжаренный кофе с нотами цитрусовых и цветов</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price">850₽</span>
+                                    <span class="old-price">950₽</span>
+                                </div>
+                                <button class="btn add-to-cart" data-id="1" data-name="Эфиопский кофе Арбика" data-price="850" data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-product="2">
+                        <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="product-info">
+                            <h3 class="product-title">Колумбийский молотый кофе</h3>
+                            <p class="product-description">Богатый вкус с нотами шоколада и орехов</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price">720₽</span>
+                                </div>
+                                <button class="btn add-to-cart" data-id="2" data-name="Колумбийский молотый кофе" data-price="720" data-image="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-product="3">
+                        <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="product-info">
+                            <h3 class="product-title">Кения Спешиалти</h3>
+                            <p class="product-description">Премиум кофе с яркими фруктовыми нотами</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price">980₽</span>
+                                    <span class="old-price">1100₽</span>
+                                </div>
+                                <button class="btn add-to-cart" data-id="3" data-name="Кения Спешиалти" data-price="980" data-image="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessories -->
+        <section style="background-color: #f0e6d2;">
+            <div class="container">
+                <h2 class="section-title">Аксессуары для приготовления</h2>
+                <div class="products-grid">
+                    <div class="product-card" data-product="4">
+                        <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="product-info">
+                            <h3 class="product-title">Френч-пресс классический</h3>
+                            <p class="product-description">Стеклянный френч-пресс с металлическим фильтром</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price">1200₽</span>
+                                </div>
+                                <button class="btn add-to-cart" data-id="4" data-name="Френч-пресс классический" data-price="1200" data-image="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card" data-product="5">
+                        <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="product-info">
+                            <h3 class="product-title">Керамическая кофейная чашка</h3>
+                            <p class="product-description">Ручная работа, сохраняет температуру напитка</p>
+                            <div class="product-price">
+                                <div>
+                                    <span class="price">450₽</span>
+                                </div>
+                                <button class="btn add-to-cart" data-id="5" data-name="Керамическая кофейная чашка" data-price="450" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section>
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>О компании CoffeeRoast & More</h2>
+                        <p>Мы специализируемся на продаже высококачественного кофе и аксессуаров для его приготовления. Вся наша продукция обжаривается на заказ, что гарантирует свежесть каждого зернышка.</p>
+                        <p>Наша команда профессионалов тщательно отбирает лучшие сорта кофе со всего мира, чтобы вы могли наслаждаться идеальным вкусом каждый день.</p>
+                        <p>Наша миссия - делиться любовью к кофе, предлагая только лучшие сорта и оборудование для приготовления идеального напитка.</p>
+                        <a href="#" class="btn nav-link" data-page="about">Узнать больше</a>
+                    </div>
+                    <div class="about-images">
+                        <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                        <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section style="background-color: #f9f5f0;">
+            <div class="container">
+                <h2 class="section-title">Отзывы наших клиентов</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Отличный кофе и быстрая доставка! Заказал эфиопский кофе и френч-пресс. Всё пришло вовремя и в отличном состоянии."</p>
+                        <p class="testimonial-author">Павел Кудряшев</p>
+                        <p style="color: #666; font-size: 14px;">Самара, ул. Молодогвардейская 59</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="testimonial-text">"Заказывал кофемолку и весы для кофе. Качество отличное, рекомендую! Доставка была быстрой и аккуратной."</p>
+                        <p class="testimonial-author">Илья Федоров</p>
+                        <p style="color: #666; font-size: 14px;">Самара, ул. Молодогвардейская 59</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Подписался на еженедельную доставку кофе. Всегда свежий и ароматный. Отличный сервис и внимательное отношение к клиентам!"</p>
+                        <p class="testimonial-author">Кирилл Григорьев</p>
+                        <p style="color: #666; font-size: 14px;">Самара, ул. Молодогвардейская 59</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Catalog Page -->
+    <div class="page" id="catalog-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="home">
+                <i class="fas fa-arrow-left"></i> Назад на главную
+            </a>
+            
+            <h1 class="section-title">Каталог товаров</h1>
+            
+            <div class="filter-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="color: #8B4513;">Фильтры</h3>
+                    <button class="reset-filters" id="resetFilters">Сбросить фильтры</button>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Категории</h4>
+                    <div class="filter-options">
+                        <div class="filter-option active" data-filter="all">Все товары</div>
+                        <div class="filter-option" data-filter="coffee">Кофе</div>
+                        <div class="filter-option" data-filter="accessories">Аксессуары</div>
+                        <div class="filter-option" data-filter="special">Специальные товары</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Тип кофе</h4>
+                    <div class="filter-options">
+                        <div class="filter-option" data-filter="beans">Зерновой</div>
+                        <div class="filter-option" data-filter="ground">Молотый</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Степень обжарки</h4>
+                    <div class="filter-options">
+                        <div class="filter-option" data-filter="light">Светлая</div>
+                        <div class="filter-option" data-filter="medium">Средняя</div>
+                        <div class="filter-option" data-filter="dark">Темная</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Страна происхождения</h4>
+                    <div class="filter-options">
+                        <div class="filter-option" data-filter="ethiopia">Эфиопия</div>
+                        <div class="filter-option" data-filter="colombia">Колумбия</div>
+                        <div class="filter-option" data-filter="kenya">Кения</div>
+                        <div class="filter-option" data-filter="specialty">Спешиалти</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Coffee Products -->
+                <div class="product-card" data-category="coffee" data-type="beans" data-roast="light" data-country="ethiopia">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Эфиопский кофе Арбика</h3>
+                        <p class="product-description">Свежеобжаренный кофе с нотами цитрусовых и цветов</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">850₽</span>
+                                <span class="old-price">950₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="1" data-name="Эфиопский кофе Арбика" data-price="850" data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="coffee" data-type="ground" data-roast="medium" data-country="colombia">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Колумбийский молотый кофе</h3>
+                        <p class="product-description">Богатый вкус с нотами шоколада и орехов</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">720₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="2" data-name="Колумбийский молотый кофе" data-price="720" data-image="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="coffee" data-type="beans" data-roast="medium" data-country="kenya">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Кения Спешиалти</h3>
+                        <p class="product-description">Премиум кофе с яркими фруктовыми нотами</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">980₽</span>
+                                <span class="old-price">1100₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="3" data-name="Кения Спешиалти" data-price="980" data-image="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="coffee" data-type="beans" data-roast="dark" data-country="colombia">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Колумбийский темный кофе</h3>
+                        <p class="product-description">Глубокий вкус с нотами какао и карамели</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">820₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="4" data-name="Колумбийский темный кофе" data-price="820" data-image="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="coffee" data-type="ground" data-roast="light" data-country="ethiopia">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Эфиопский молотый кофе</h3>
+                        <p class="product-description">Яркие фруктовые ноты, легкая кислинка</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">780₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="5" data-name="Эфиопский молотый кофе" data-price="780" data-image="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="coffee" data-type="beans" data-roast="medium" data-country="specialty">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Спешиалти микс</h3>
+                        <p class="product-description">Сборная коллекция лучших сортов мира</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">1200₽</span>
+                                <span class="old-price">1350₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="6" data-name="Спешиалти микс" data-price="1200" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accessories Products -->
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Френч-пресс классический</h3>
+                        <p class="product-description">Стеклянный френч-пресс с металлическим фильтром</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">1200₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="7" data-name="Френч-пресс классический" data-price="1200" data-image="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Керамическая кофейная чашка</h3>
+                        <p class="product-description">Ручная работа, сохраняет температуру напитка</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">450₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="8" data-name="Керамическая кофейная чашка" data-price="450" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Кофемолка ручная</h3>
+                        <p class="product-description">Ручная кофемолка из натурального дерева</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">1800₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="9" data-name="Кофемолка ручная" data-price="1800" data-image="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Весы для кофе</h3>
+                        <p class="product-description">Точные кухонные весы с таймером</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">2100₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="10" data-name="Весы для кофе" data-price="2100" data-image="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Капельница стеклянная</h3>
+                        <p class="product-description">Классическая капельница для приготовления кофе</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">850₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="11" data-name="Капельница стеклянная" data-price="850" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="accessories">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Фильтры для кофе</h3>
+                        <p class="product-description">Бумажные фильтры для капельницы, 100 шт.</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">250₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="12" data-name="Фильтры для кофе" data-price="250" data-image="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Special Products -->
+                <div class="product-card" data-category="special">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Ручная обжарка кофе</h3>
+                        <p class="product-description">Мини-обжарочная машина для дома</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">15000₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="13" data-name="Ручная обжарка кофе" data-price="15000" data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="special">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Эспрессо-машина Profi</h3>
+                        <p class="product-description">Профессиональная эспрессо-машина для дома</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">25000₽</span>
+                                <span class="old-price">28000₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="14" data-name="Эспрессо-машина Profi" data-price="25000" data-image="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-category="special">
+                    <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Кофейный набор Premium</h3>
+                        <p class="product-description">Комплект из кофемолки, френч-пресса и весов</p>
+                        <div class="product-price">
+                            <div>
+                                <span class="price">4500₽</span>
+                                <span class="old-price">5200₽</span>
+                            </div>
+                            <button class="btn add-to-cart" data-id="15" data-name="Кофейный набор Premium" data-price="4500" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80">В корзину</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Page - Step 1: Delivery Method -->
+    <div class="page" id="checkout-delivery-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="catalog">
+                <i class="fas fa-arrow-left"></i> Назад в корзину
+            </a>
+            
+            <h1 class="section-title">Оформление заказа</h1>
+            
+            <div class="checkout-steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div>Способ получения</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>Контакты</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>Подтверждение</div>
+                </div>
+            </div>
+            
+            <div class="checkout-form">
+                <h3 style="color: #8B4513; margin-bottom: 20px;">Выберите способ получения</h3>
+                <div class="delivery-options">
+                    <div class="delivery-option" data-delivery="delivery">
+                        <h4>Доставка курьером</h4>
+                        <p>Доставка до двери в течение 1-2 дней</p>
+                        <p style="font-weight: 700; color: #8B4513;">300₽</p>
+                    </div>
+                    <div class="delivery-option" data-delivery="pickup">
+                        <h4>Самовывоз</h4>
+                        <p>Заберите заказ в нашем магазине</p>
+                        <p style="font-weight: 700; color: #8B4513;">Бесплатно</p>
+                    </div>
+                </div>
+                <button class="btn btn-block" id="confirmDeliveryBtn" disabled>Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Page - Step 2: Contact Info -->
+    <div class="page" id="checkout-contact-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="checkout-delivery">
+                <i class="fas fa-arrow-left"></i> Назад
+            </a>
+            
+            <h1 class="section-title">Оформление заказа</h1>
+            
+            <div class="checkout-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div>Способ получения</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div>Контакты</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>Подтверждение</div>
+                </div>
+            </div>
+            
+            <div class="checkout-form">
+                <h3 style="color: #8B4513; margin-bottom: 20px;">Контактная информация</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>Имя *</label>
+                        <input type="text" id="customerName" placeholder="Введите имя">
+                    </div>
+                    <div class="form-col">
+                        <label>Телефон *</label>
+                        <input type="tel" id="customerPhone" placeholder="Введите телефон">
+                    </div>
+                </div>
+                
+                <div id="deliveryFields" style="display: none;">
+                    <div class="form-col form-col-full">
+                        <label>Город *</label>
+                        <input type="text" id="customerCity" placeholder="Введите город">
+                    </div>
+                    <div class="form-col form-col-full">
+                        <label>Адрес доставки *</label>
+                        <input type="text" id="customerAddress" placeholder="Введите адрес">
+                    </div>
+                </div>
+                
+                <button class="btn btn-block" id="confirmContactBtn">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Page - Step 3: Confirmation -->
+    <div class="page" id="checkout-confirm-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="checkout-contact">
+                <i class="fas fa-arrow-left"></i> Назад
+            </a>
+            
+            <h1 class="section-title">Оформление заказа</h1>
+            
+            <div class="checkout-steps">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <div>Способ получения</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <div>Контакты</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div>Подтверждение</div>
+                </div>
+            </div>
+            
+            <div class="order-summary">
+                <h3 style="color: #8B4513; margin-bottom: 20px;">Ваш заказ</h3>
+                <div class="order-items" id="orderItems">
+                    <!-- Order items will be populated here -->
+                </div>
+                <div class="order-total" id="orderTotal">
+                    <!-- Order total will be populated here -->
+                </div>
+                <button class="btn btn-block" id="placeOrderBtn">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Page -->
+    <div class="page" id="success-page">
+        <div class="container">
+            <div class="success-page">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Заказ успешно оформлен!</h1>
+                <p>Спасибо за ваш заказ. Мы свяжемся с вами в ближайшее время.</p>
+                <div class="order-number" id="orderNumber">Номер заказа: D1268</div>
+                <a href="#" class="btn nav-link" data-page="home">Вернуться на главную</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="page" id="profile-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="home">
+                <i class="fas fa-arrow-left"></i> Назад на главную
+            </a>
+            
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">АП</div>
+                <div class="profile-info-main">
+                    <h2 id="profileName">Алексей Петров</h2>
+                    <p id="profilePhone">+7 (999) 123-45-67</p>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <div class="profile-tab active">Мои заказы</div>
+                <div class="profile-tab">Избранное</div>
+                <div class="profile-tab">Настройки</div>
+            </div>
+            
+            <div class="order-summary">
+                <h3 style="color: #8B4513; margin-bottom: 20px;">История заказов</h3>
+                <div class="orders-list" id="profileOrdersList">
+                    <!-- Orders will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div class="page" id="about-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="home">
+                <i class="fas fa-arrow-left"></i> Назад на главную
+            </a>
+            
+            <h1 class="section-title">О компании CoffeeRoast & More</h1>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Наша история</h2>
+                    <p>CoffeeRoast & More была основана в 2015 году группой энтузиастов, которые разделяли страсть к качественному кофе. Начав с маленькой обжарочной мастерской, мы выросли в крупный поставщик кофе и аксессуаров для кофейных ценителей по всей России.</p>
+                    <p>Наша миссия - делиться любовью к кофе, предлагая только лучшие сорта и оборудование для приготовления идеального напитка.</p>
+                    <p>Мы гордимся тем, что все наши зерна обжариваются на заказ, что гарантирует максимальную свежесть и насыщенный вкус каждого покупаемого пакета кофе.</p>
+                    
+                    <h2 style="margin-top: 40px;">Наш опыт</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 20px 0;">
+                        <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #8B4513; margin-bottom: 10px;">9+</div>
+                            <div>Лет на рынке</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #8B4513; margin-bottom: 10px;">5000+</div>
+                            <div>Довольных клиентов</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: #8B4513; margin-bottom: 10px;">50+</div>
+                            <div>Сортов кофе</div>
+                        </div>
+                    </div>
+                    
+                    <h2 style="margin-top: 40px;">Наши ценности</h2>
+                    <ul style="margin: 20px 0 30px 20px;">
+                        <li style="margin-bottom: 10px;">Качество продукции превыше всего</li>
+                        <li style="margin-bottom: 10px;">Индивидуальный подход к каждому клиенту</li>
+                        <li style="margin-bottom: 10px;">Экологичность и устойчивое развитие</li>
+                        <li>Постоянное развитие и инновации</li>
+                    </ul>
+                </div>
+                <div class="about-images">
+                    <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contacts Page -->
+    <div class="page" id="contacts-page">
+        <div class="container">
+            <a href="#" class="back-to-home nav-link" data-page="home">
+                <i class="fas fa-arrow-left"></i> Назад на главную
+            </a>
+            
+            <h1 class="section-title">Контакты</h1>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div>
+                    <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+                        <h2 style="color: #8B4513; margin-bottom: 20px;">Свяжитесь с нами</h2>
+                        <form>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Имя</label>
+                                <input type="text" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" placeholder="Ваше имя">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
+                                <input type="email" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" placeholder="email@example.com">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Сообщение</label>
+                                <textarea rows="5" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;" placeholder="Ваше сообщение"></textarea>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Отправить сообщение</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div>
+                    <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+                        <h2 style="color: #8B4513; margin-bottom: 20px;">Информация</h2>
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; background: #f0e6d2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    <i class="fas fa-map-marker-alt" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;">Адрес</div>
+                                    <div>Самара, ул. Молодогвардейская 59</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; background: #f0e6d2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    <i class="fas fa-phone" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;">Телефон</div>
+                                    <div>+7 (999) 123-45-67</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                <div style="width: 40px; height: 40px; background: #f0e6d2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    <i class="fas fa-envelope" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;">Email</div>
+                                    <div>info@coffeeroast.ru</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 40px; height: 40px; background: #f0e6d2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                    <i class="fas fa-clock" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;">Часы работы</div>
+                                    <div>Пн-Вс: 9:00 - 21:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h2 style="color: #8B4513; margin-bottom: 20px;">Подписаться на новости</h2>
+                        <p style="margin-bottom: 20px; color: #666;">Получайте информацию о новых поступлениях и специальных предложениях</p>
+                        <div style="display: flex;">
+                            <input type="email" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 30px 0 0 30px; border-right: none;" placeholder="Ваш email">
+                            <button class="btn" style="border-radius: 0 30px 30px 0; padding: 12px 25px;">Подписаться</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CoffeeRoast & More</h3>
+                    <p>Свежеобжаренный кофе и аксессуары для настоящих ценителей вкуса.</p>
+                    <div style="margin-top: 20px;">
+                        <i class="fab fa-instagram" style="margin-right: 15px; font-size: 20px;"></i>
+                        <i class="fab fa-facebook" style="margin-right: 15px; font-size: 20px;"></i>
+                        <i class="fab fa-vk" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Каталог</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="catalog">Кофе в зернах</a></li>
+                        <li><a href="#" class="nav-link" data-page="catalog">Молотый кофе</a></li>
+                        <li><a href="#" class="nav-link" data-page="catalog">Аксессуары</a></li>
+                        <li><a href="#" class="nav-link" data-page="catalog">Специальные товары</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Информация</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="about">О компании</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Оплата</a></li>
+                        <li><a href="#" class="nav-link" data-page="contacts">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column contact-info">
+                    <h3>Контакты</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Самара, ул. Молодогвардейская 59</p>
+                    <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                    <p><i class="fas fa-envelope"></i> info@coffeeroast.ru</p>
+                    <p><i class="fas fa-clock"></i> Пн-Вс 9:00-21:00</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 CoffeeRoast & More. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Shopping Cart System (без localStorage)
+        let cart = [];
+        let cartCount = 0;
+        let currentUser = null;
+        let users = []; // Временное хранение в памяти
+        let userOrders = []; // Временное хранение в памяти
+
+        // DOM Elements
+        const cartIcon = document.getElementById('cartIcon');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const userIcon = document.getElementById('userIcon');
+        const userModal = document.getElementById('userModal');
+        const closeUser = document.getElementById('closeUser');
+        const overlay = document.getElementById('overlay');
+        const cartItems = document.getElementById('cartItems');
+        const totalPrice = document.getElementById('totalPrice');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsModal = document.getElementById('searchResultsModal');
+        const searchResultsList = document.getElementById('searchResultsList');
+        const closeSearchResults = document.getElementById('closeSearchResults');
+        const resetFiltersBtn = document.getElementById('resetFilters');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const confirmDeliveryBtn = document.getElementById('confirmDeliveryBtn');
+        const confirmContactBtn = document.getElementById('confirmContactBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const orderItems = document.getElementById('orderItems');
+        const orderTotal = document.getElementById('orderTotal');
+        const orderNumber = document.getElementById('orderNumber');
+        const userOrdersList = document.getElementById('userOrdersList');
+        const profileOrdersList = document.getElementById('profileOrdersList');
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const deliveryOptions = document.querySelectorAll('.delivery-option');
+
+        // Form elements
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const profileSection = document.getElementById('profileSection');
+        const ordersSection = document.getElementById('ordersSection');
+        const userModalTitle = document.getElementById('userModalTitle');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+
+        // Input fields
+        const loginInput = document.getElementById('loginInput');
+        const loginPassword = document.getElementById('loginPassword');
+        const registerName = document.getElementById('registerName');
+        const registerPhone = document.getElementById('registerPhone');
+        const registerEmail = document.getElementById('registerEmail');
+        const registerPassword = document.getElementById('registerPassword');
+        const customerName = document.getElementById('customerName');
+        const customerPhone = document.getElementById('customerPhone');
+        const customerCity = document.getElementById('customerCity');
+        const customerAddress = document.getElementById('customerAddress');
+
+        // Add to Cart Buttons
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+        // Product data for search
+        const products = [
+            { id: 1, name: "Эфиопский кофе Арбика", category: "coffee", price: 850, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 2, name: "Колумбийский молотый кофе", category: "coffee", price: 720, image: "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 3, name: "Кения Спешиалти", category: "coffee", price: 980, image: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 4, name: "Колумбийский темный кофе", category: "coffee", price: 820, image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 5, name: "Эфиопский молотый кофе", category: "coffee", price: 780, image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 6, name: "Спешиалти микс", category: "coffee", price: 1200, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 7, name: "Френч-пресс классический", category: "accessories", price: 1200, image: "https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 8, name: "Керамическая кофейная чашка", category: "accessories", price: 450, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 9, name: "Кофемолка ручная", category: "accessories", price: 1800, image: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 10, name: "Весы для кофе", category: "accessories", price: 2100, image: "https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 11, name: "Капельница стеклянная", category: "accessories", price: 850, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 12, name: "Фильтры для кофе", category: "accessories", price: 250, image: "https://images.unsplash.com/photo-1559496417-e7f25cb247f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 13, name: "Ручная обжарка кофе", category: "special", price: 15000, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 14, name: "Эспрессо-машина Profi", category: "special", price: 25000, image: "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+            { id: 15, name: "Кофейный набор Premium", category: "special", price: 4500, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetPage = this.getAttribute('data-page');
+                    showPage(targetPage);
+                });
+            });
+
+            // Cart functionality
+            cartIcon.addEventListener('click', openCart);
+            closeCart.addEventListener('click', closeCartModal);
+            
+            // User functionality
+            userIcon.addEventListener('click', openUser);
+            closeUser.addEventListener('click', closeUserModal);
+            logoutBtn.addEventListener('click', logout);
+            
+            // Overlay
+            overlay.addEventListener('click', function() {
+                closeCartModal();
+                closeUserModal();
+                searchResultsModal.classList.remove('active');
+            });
+
+            // Add to cart
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = parseInt(this.getAttribute('data-price'));
+                    const image = this.getAttribute('data-image');
+                    
+                    addToCart(id, name, price, image);
+                });
+            });
+
+            // Checkout button
+            checkoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentUser) {
+                    showPage('checkout-delivery');
+                } else {
+                    openUser();
+                }
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                if (query.length > 0) {
+                    searchProducts(query);
+                } else {
+                    searchResultsModal.classList.remove('active');
+                }
+            });
+
+            // Close search results
+            closeSearchResults.addEventListener('click', function() {
+                searchResultsModal.classList.remove('active');
+                searchInput.value = '';
+            });
+
+            // Filter functionality in catalog
+            const filterOptions = document.querySelectorAll('.filter-option');
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from siblings in the same group
+                    const parentGroup = this.parentElement;
+                    parentGroup.querySelectorAll('.filter-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Apply filter
+                    applyFilter();
+                });
+            });
+
+            // Reset filters
+            resetFiltersBtn.addEventListener('click', resetFilters);
+
+            // Delivery options
+            deliveryOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    deliveryOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    deliveryMethod = this.getAttribute('data-delivery');
+                    confirmDeliveryBtn.disabled = false;
+                    
+                    // Show/hide delivery fields based on selection
+                    const deliveryFields = document.getElementById('deliveryFields');
+                    if (deliveryMethod === 'delivery') {
+                        deliveryFields.style.display = 'block';
+                    } else {
+                        deliveryFields.style.display = 'none';
+                    }
+                });
+            });
+
+            // Confirm delivery
+            confirmDeliveryBtn.addEventListener('click', function() {
+                if (deliveryMethod) {
+                    showPage('checkout-contact');
+                }
+            });
+
+            // Confirm contact info
+            confirmContactBtn.addEventListener('click', function() {
+                // Save contact info
+                orderData.name = customerName.value;
+                orderData.phone = customerPhone.value;
+                if (deliveryMethod === 'delivery') {
+                    orderData.city = customerCity.value;
+                    orderData.address = customerAddress.value;
+                }
+                showPage('checkout-confirm');
+                renderOrderSummary();
+            });
+
+            // Place order
+            placeOrderBtn.addEventListener('click', function() {
+                // Generate random order number
+                const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                const orderNum = randomLetter + randomNum;
+                orderNumber.textContent = `Номер заказа: ${orderNum}`;
+                
+                // Create order object
+                const order = {
+                    id: orderNum,
+                    date: new Date().toLocaleDateString('ru-RU'),
+                    status: 'pending',
+                    deliveryMethod: deliveryMethod,
+                    address: deliveryMethod === 'delivery' ? `${customerCity.value}, ${customerAddress.value}` : 'Самовывоз из магазина',
+                    items: [...cart],
+                    total: calculateTotal(),
+                    userId: currentUser ? currentUser.id : null
+                };
+                
+                // Add to user orders
+                userOrders.push(order);
+                
+                // Clear cart
+                cart = [];
+                cartCount = 0;
+                updateCartBadge();
+                
+                showPage('success');
+                renderUserOrders();
+            });
+
+            // Form switching
+            showRegister.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                userModalTitle.textContent = 'Регистрация';
+            });
+
+            showLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                userModalTitle.textContent = 'Вход в аккаунт';
+            });
+
+            // Login
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const loginValue = loginInput.value.trim();
+                const password = loginPassword.value;
+
+                if (!loginValue || !password) {
+                    alert('Пожалуйста, заполните все поля');
+                    return;
+                }
+
+                // Find user by email or phone
+                const user = users.find(u => 
+                    u.email === loginValue || u.phone === loginValue
+                );
+
+                if (user && user.password === password) {
+                    currentUser = user;
+                    updateUIForLoggedInUser();
+                    loginForm.style.display = 'none';
+                    profileSection.style.display = 'block';
+                    ordersSection.style.display = 'block';
+                    renderUserOrders();
+                    renderProfileInfo();
+                } else {
+                    alert('Неверный логин или пароль');
+                }
+            });
+
+            // Register
+            registerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const name = registerName.value.trim();
+                const phone = registerPhone.value.trim();
+                const email = registerEmail.value.trim();
+                const password = registerPassword.value;
+
+                if (!name || !phone || !email || !password) {
+                    alert('Пожалуйста, заполните все поля');
+                    return;
+                }
+
+                // Check if user already exists
+                if (users.some(u => u.email === email || u.phone === phone)) {
+                    alert('Пользователь с таким email или телефоном уже существует');
+                    return;
+                }
+
+                // Create new user
+                const newUser = {
+                    id: Date.now(),
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    password: password
+                };
+
+                users.push(newUser);
+                currentUser = newUser;
+                updateUIForLoggedInUser();
+                registerForm.style.display = 'none';
+                profileSection.style.display = 'block';
+                ordersSection.style.display = 'block';
+                renderUserOrders();
+                renderProfileInfo();
+            });
+        });
+
+        // Navigation Functions
+        function showPage(pageName) {
+            // Hide all pages
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show target page
+            document.getElementById(`${pageName}-page`).classList.add('active');
+            
+            // Close modals if open
+            closeCartModal();
+            closeUserModal();
+            searchResultsModal.classList.remove('active');
+            
+            // Clear search
+            searchInput.value = '';
+            
+            // Reset filters when leaving catalog page
+            if (pageName !== 'catalog') {
+                resetFilters();
+            }
+            
+            // Update profile page if needed
+            if (pageName === 'profile' && currentUser) {
+                renderProfilePage();
+            }
+        }
+
+        // Cart Functions
+        function addToCart(id, name, price, image) {
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            cartCount++;
+            updateCartBadge();
+            
+            // Visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Добавлено!';
+            button.style.backgroundColor = '#27ae60';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 1500);
+        }
+
+        function updateCartBadge() {
+            cartBadge.textContent = cartCount;
+        }
+
+        function openCart() {
+            renderCart();
+            cartModal.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartModal() {
+            cartModal.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function renderCart() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Корзина пуста</p>
+                    </div>
+                `;
+                totalPrice.textContent = '0₽';
+                return;
+            }
+
+            let cartHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image" style="background-image: url('${item.image}')"></div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">${item.price}₽</div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn minus-btn" data-id="${item.id}">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="quantity-btn plus-btn" data-id="${item.id}">+</button>
+                                <button class="remove-item" data-id="${item.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartItems.innerHTML = cartHTML;
+            totalPrice.textContent = `${total}₽`;
+
+            // Add event listeners to cart controls
+            document.querySelectorAll('.minus-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    updateQuantity(id, -1);
+                });
+            });
+
+            document.querySelectorAll('.plus-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    updateQuantity(id, 1);
+                });
+            });
+
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    removeFromCart(id);
+                });
+            });
+        }
+
+        function updateQuantity(id, change) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    cartCount += change;
+                    updateCartBadge();
+                    renderCart();
+                }
+            }
+        }
+
+        function removeFromCart(id) {
+            const itemIndex = cart.findIndex(item => item.id === id);
+            if (itemIndex !== -1) {
+                cartCount -= cart[itemIndex].quantity;
+                cart.splice(itemIndex, 1);
+                updateCartBadge();
+                renderCart();
+            }
+        }
+
+        // User Functions
+        function openUser() {
+            if (currentUser) {
+                // Show profile
+                profileSection.style.display = 'block';
+                ordersSection.style.display = 'block';
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                userModalTitle.textContent = 'Профиль';
+                renderUserOrders();
+                renderProfileInfo();
+            } else {
+                // Show login form
+                profileSection.style.display = 'none';
+                ordersSection.style.display = 'none';
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                userModalTitle.textContent = 'Вход в аккаунт';
+            }
+            
+            userModal.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUserModal() {
+            userModal.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUIForLoggedOutUser();
+            closeUserModal();
+        }
+
+        function updateUIForLoggedInUser() {
+            // Update UI for logged in user
+            userIcon.innerHTML = '<i class="fas fa-user-check"></i>';
+        }
+
+        function updateUIForLoggedOutUser() {
+            // Update UI for logged out user
+            userIcon.innerHTML = '<i class="fas fa-user"></i>';
+        }
+
+        function renderProfileInfo() {
+            if (currentUser) {
+                document.getElementById('profileInfo').innerHTML = `
+                    <p><strong>Имя:</strong> ${currentUser.name}</p>
+                    <p><strong>Телефон:</strong> ${currentUser.phone}</p>
+                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                `;
+            }
+        }
+
+        function renderProfilePage() {
+            if (currentUser) {
+                document.getElementById('profileAvatar').textContent = currentUser.name.charAt(0) + currentUser.name.charAt(currentUser.name.indexOf(' ') + 1);
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('profilePhone').textContent = currentUser.phone;
+                renderUserOrders();
+            }
+        }
+
+        // Search Functionality
+        function searchProducts(query) {
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(query)
+            );
+            
+            if (filteredProducts.length > 0) {
+                let resultsHTML = '';
+                filteredProducts.forEach(product => {
+                    resultsHTML += `
+                        <div class="search-result-item" data-id="${product.id}">
+                            <div class="search-result-image" style="background-image: url('${product.image}')"></div>
+                            <div class="search-result-info">
+                                <div class="search-result-title">${product.name}</div>
+                                <div class="search-result-price">${product.price}₽</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                searchResultsList.innerHTML = resultsHTML;
+                
+                // Add click event to search results
+                document.querySelectorAll('.search-result-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-id');
+                        const product = products.find(p => p.id == productId);
+                        if (product) {
+                            // Add to cart or show product details
+                            addToCart(product.id, product.name, product.price, product.image);
+                            searchResultsModal.classList.remove('active');
+                            searchInput.value = '';
+                        }
+                    });
+                });
+                
+                searchResultsModal.classList.add('active');
+            } else {
+                searchResultsList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Товары не найдены</p>
+                    </div>
+                `;
+                searchResultsModal.classList.add('active');
+            }
+        }
+
+        // Filter Functionality
+        function applyFilter() {
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                let showCard = true;
+                
+                // Get all filter attributes from the card
+                const category = card.getAttribute('data-category');
+                const type = card.getAttribute('data-type');
+                const roast = card.getAttribute('data-roast');
+                const country = card.getAttribute('data-country');
+                
+                // Check active filters
+                const activeFilters = document.querySelectorAll('.filter-option.active');
+                
+                activeFilters.forEach(filter => {
+                    const filterValue = filter.getAttribute('data-filter');
+                    
+                    if (filterValue !== 'all') {
+                        // Check if card matches any active filter
+                        let matches = false;
+                        
+                        if (category === filterValue) matches = true;
+                        if (type === filterValue) matches = true;
+                        if (roast === filterValue) matches = true;
+                        if (country === filterValue) matches = true;
+                        
+                        if (!matches) showCard = false;
+                    }
+                });
+                
+                // Show or hide card
+                card.style.display = showCard ? 'block' : 'none';
+            });
+        }
+
+        // Reset Filters
+        function resetFilters() {
+            // Remove active class from all filter options
+            document.querySelectorAll('.filter-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Set 'all' filter as active
+            document.querySelectorAll('[data-filter="all"]').forEach(option => {
+                option.classList.add('active');
+            });
+            
+            // Show all products
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+
+        // Order Summary
+        let deliveryMethod = null;
+        let orderData = {
+            name: "",
+            phone: "",
+            city: "",
+            address: ""
+        };
+
+        function renderOrderSummary() {
+            let orderHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                orderHTML += `
+                    <div class="order-item-summary">
+                        <div>${item.name} (${item.quantity} шт.)</div>
+                        <div>${itemTotal}₽</div>
+                    </div>
+                `;
+            });
+
+            // Add delivery cost
+            let deliveryCost = 0;
+            if (deliveryMethod === 'delivery') {
+                deliveryCost = 300;
+                orderHTML += `
+                    <div class="order-item-summary">
+                        <div>Доставка курьером</div>
+                        <div>${deliveryCost}₽</div>
+                    </div>
+                `;
+            } else {
+                orderHTML += `
+                    <div class="order-item-summary">
+                        <div>Самовывоз</div>
+                        <div>Бесплатно</div>
+                    </div>
+                `;
+            }
+
+            total += deliveryCost;
+
+            orderItems.innerHTML = orderHTML;
+            orderTotal.innerHTML = `
+                <div>Итого:</div>
+                <div>${total}₽</div>
+            `;
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+            });
+            
+            if (deliveryMethod === 'delivery') {
+                total += 300;
+            }
+            
+            return total;
+        }
+
+        // Render User Orders
+        function renderUserOrders() {
+            if (!currentUser) {
+                userOrdersList.innerHTML = '<p>Для просмотра заказов необходимо войти</p>';
+                profileOrdersList.innerHTML = '<p>Для просмотра заказов необходимо войти</p>';
+                return;
+            }
+
+            // Filter orders for current user
+            const userOrdersFiltered = userOrders.filter(order => order.userId === currentUser.id);
+            
+            if (userOrdersFiltered.length === 0) {
+                userOrdersList.innerHTML = '<p>У вас пока нет заказов</p>';
+                profileOrdersList.innerHTML = '<p>У вас пока нет заказов</p>';
+                return;
+            }
+
+            let ordersHTML = '';
+            userOrdersFiltered.forEach(order => {
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(order.status) {
+                    case 'pending':
+                        statusClass = 'status-pending';
+                        statusText = 'Ожидает оплаты';
+                        break;
+                    case 'processing':
+                        statusClass = 'status-processing';
+                        statusText = 'В обработке';
+                        break;
+                    case 'completed':
+                        statusClass = 'status-completed';
+                        statusText = 'Доставлен';
+                        break;
+                }
+
+                ordersHTML += `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-id">#${order.id}</div>
+                            <div class="order-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="order-details">
+                            <p>Дата: ${order.date}</p>
+                            <p>Способ получения: ${order.deliveryMethod === 'delivery' ? 'Доставка' : 'Самовывоз'}</p>
+                            <p>Адрес: ${order.address}</p>
+                            <p>Сумма: ${calculateOrderTotal(order.items)}₽</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            userOrdersList.innerHTML = ordersHTML;
+            profileOrdersList.innerHTML = ordersHTML;
+        }
+
+        function calculateOrderTotal(items) {
+            return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+    </script>
+</body>
+</html>
